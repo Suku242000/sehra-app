@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', require('./routers/authroutes'));
+app.use('/api/auth', require('./routers/authRoutes'));
 app.use('/api/packages', require('./routers/packageRoutes'));
 
 // Test Route
