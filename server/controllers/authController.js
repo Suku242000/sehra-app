@@ -2,42 +2,38 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'sehrasecret';
+const JWT_SECRET = "your_jwt_secret_here"; // keep in .env later
 
-// Register User
-exports.register = async (req, res) => {
-    const { name, email, password, role } = req.body;
+exports.registerUser = async (req, res) => {
+  const { name, email, password, role } = req.body;
 
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ msg: 'User already exists' });
+  const userExist = await User.findOne({ email });
+  if (userExist) return res.status(400).json({ message: "User already exists" });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ name, email, password: hashedPassword, role });
-        await newUser.save();
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    role,
+  });
 
-        res.status(201).json({ msg: 'User Registered Successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  res.status(201).json({ message: "User Registered Successfully" });
 };
 
-// Login User
-exports.login = async (req, res) => {
-    const { email, password } = req.body;
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ msg: 'User not found' });
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ message: "User not found" });
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(400).json({ message: "Invalid Credentials" });
 
-        const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
-        res.json({ token, user });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  res.json({ token, user });
 };
