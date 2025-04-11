@@ -12,7 +12,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd server && node index.js"
+args = "cd \"server backend\" && node index.js"
 
 [[ports]]
 localPort = 5000
