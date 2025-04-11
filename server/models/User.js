@@ -16,8 +16,12 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['bride', 'groom', 'planner', 'vendor'],
-    default: 'bride',
+    enum: ['Bride', 'Groom', 'FAMILY', 'Planner', 'Vendor'],
+    required: true
+  },
+  selectedPackage: {
+    type: String,
+    default: null
   },
 });
 
