@@ -16,13 +16,15 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Bride', 'Groom', 'FAMILY', 'Planner', 'Vendor'],
-    required: true
+    enum: ['Bride', 'Groom', 'Planner', 'Vendor'],
+    required: true,
   },
   selectedPackage: {
     type: String,
-    default: null
+    default: null,
   },
 });
 
 module.exports = mongoose.model('User', userSchema);
+
+
